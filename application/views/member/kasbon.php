@@ -1,0 +1,135 @@
+<div class="col-lg-12 mt-3">
+    <div class="col-12">
+        <?php $this->view('messages') ?>
+        <?php
+        if ($company['theme'] == 'primary') {
+            $backgroundnya = '#4e73df';
+            $colornya = '#fff';
+        } elseif ($company['theme'] == 'secondary') {
+            $backgroundnya = '#6c757d';
+            $colornya = '#fff';
+        } elseif ($company['theme'] == 'success') {
+            $backgroundnya = '#1cc88a';
+            $colornya = '#fff';
+        } elseif ($company['theme'] == 'danger') {
+            $backgroundnya = '#e74a3b';
+            $colornya = '#fff';
+        } elseif ($company['theme'] == 'warning') {
+            $backgroundnya = '#f6c23e';
+            $colornya = '#fff';
+        } elseif ($company['theme'] == 'info') {
+            $backgroundnya = '#36b9cc';
+            $colornya = '#fff';
+        } elseif ($company['theme'] == 'dark') {
+            $backgroundnya = '#5a5c69';
+            $colornya = '#fff';
+        } elseif ($company['theme'] == 'light') {
+            $backgroundnya = '#f8f9fc';
+            $colornya = '#000';
+        } elseif ($company['theme'] == 'default') {
+            $backgroundnya = '#ffffff';
+            $colornya = '#000';
+        } elseif ($company['theme'] == 'purple') {
+            $backgroundnya = '#6f42c1';
+            $colornya = '#fff';
+        } elseif ($company['theme'] == 'orange') {
+            $backgroundnya = '#fd7e14';
+            $colornya = '#fff';
+        } else {
+            $backgroundnya = '#e74a3b';
+            $colornya = '#fff';
+        }
+        ?>
+    </div>
+    <div class="col-12">
+        <div class="card shadow mb-3" style="border: solid 1px grey;">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold" style="color : <?= $backgroundnya ?>">Pengajuan Kasbon</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="form-renew">
+                            <form action="<?= site_url('member/ajukankasbon') ?>" method="POST">
+                                <div class="row">
+                                    <div class="form-group col-lg-4 col-12">
+                                        <label>Nomor Layanan</label>
+                                        <input type="text" class="form-control" readonly value="<?= $user['no_services'] ?>" name="nomor_services" id="nomor_services">
+                                        <input type="hidden" class="form-control" readonly value="DALAM PROSES" name="status_kasbon" id="status_kasbon">
+                                        <input type="hidden" class="form-control" readonly value="<?= date('d/m/Y H:i:s') ?> WIB" name="waktu_kasbon" id="waktu_kasbon">
+                                    </div>
+                                    <div class="form-group col-lg-4 col-12">
+                                        <label>Nama Karyawan</label>
+                                        <input type="text" class="form-control" readonly value="<?= $user['name'] ?>" name="nama_karyawan" id="nama_karyawan">
+                                    </div>
+                                    <div class="form-group col-lg-4 col-12">
+                                        <label>Jumlah / Nominal</label>
+                                        <input type="number" class="form-control" required name="nominal_kasbon" id="nominal_kasbon">
+                                    </div>
+                                    <div class="form-group col-lg-12 col-12">
+                                        <label>Alasan Kasbon</label>
+                                        <textarea class="form-control" placeholder="Tuliskan alasan mengapa anda ingin kasbon . . ." name="ket_kasbon" id="ket_kasbon" rows="3"></textarea>
+                                    </div>
+                                    <div class="form-group col-lg-12 col-12">
+                                        <button type="submit" class="btn bg-primary form-control text-white">Ajukan Sekarang</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+$kasbon = $this->db->get_where('kasbon', ['nomor_services' => $user['no_services']])->result();
+$subtotal = 0;
+foreach ($kasbon as $c => $data) {
+    $subtotal += $data->nominal_kasbon;
+}
+?>
+<div class="col-lg-12 mt-3">
+    <div class="col-12">
+        <div class="card shadow mb-3" style="border: solid 1px grey;">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold" style="color : <?= $backgroundnya ?>">Riwayat Pengajuan Kasbon</h6>
+
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="zero_config" class="table table-striped table-bordered no-wrap">
+                        <thead>
+                            <tr style="text-align: center">
+                                <th style="text-align: center;">No</th>
+                                <th style="text-align: left;">Alasan</th>
+                                <th style="text-align: center;">Nominal</th>
+                                <th style="text-align: center;">Status</th>
+                                <th style="text-align: center;">Tanggal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $no = 1;
+                            foreach ($kasbon as $r => $dataku) { ?>
+                                <tr>
+                                    <td style="text-align: center;"><?= $no++ ?>.</td>
+                                    <td><?= $dataku->ket_kasbon; ?></td>
+                                    <td style="text-align: right;"><?= indo_currency($dataku->nominal_kasbon); ?></td>
+                                    <td style="text-align: center;"><?= $dataku->status_kasbon; ?></td>
+                                    <td style="text-align: center;"><?= $dataku->waktu_kasbon; ?></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                        <tfoot>
+                            <tr style="text-align: center">
+                                <th style="text-align: right; font-weight:bold" colspan="2"><b>Total</b></th>
+                                <th style="text-align: right"><?= indo_currency($subtotal); ?></th>
+                                <th colspan="2"><?= number_to_words($subtotal); ?> Rupiah</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

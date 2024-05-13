@@ -1,0 +1,441 @@
+
+    public function addgenerate()
+    {
+        $post = $this->input->post(null, true);
+        $data['title'] = 'Generate Users';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['company'] = $this->db->get_where('company', array('status' => 'Aktif'))->row_array();
+
+		
+        $myrouter  = $this->db->get_where('router', ['description' => 'Aktif'])->row_array();
+$API = new routeros();
+        $host = $myrouter['host_router'];
+        $user = $myrouter['user_router'];
+        $pass = $myrouter['pass_router'];
+        $port = $myrouter['port_router'];
+        $API->connect($host, $port, $user, $pass);
+		$this->load->helper(array('url', 'string'));
+		
+		$jumlah = $this->input->post('jumlah');
+		$panjang = $this->input->post('panjang');
+		$profile = $this->input->post('profile');
+		$server = $this->input->post('server');
+		$prefix = $this->input->post('prefix');
+		$voucher = $this->input->post('voucher');
+		$waktu = $this->input->post('waktu');
+		$waktu1 = $this->input->post('waktu1');
+		$limit_waktu = $waktu.$waktu1;
+		$kuota = $this->input->post('kuota');
+		$kuota1 = $this->input->post('kuota1');
+		$limit_kuota = $kuota.$kuota1;
+		$karakter = $this->input->post('karakter');
+		$komentar = $this->input->post('comment');
+		$dibuat = $this->input->post('dibuat');
+		$comment = $komentar.' - '.$dibuat;
+
+		if($prefix == ''){
+			if($voucher = 'beda'){
+				if($waktu == ''){
+					if($kuota == ''){
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"comment" => $comment,
+								));
+							}
+						}
+					}else{
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $comment,
+								));
+							}
+						}
+					}
+				} else {
+					if($kuota == ''){
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"comment" => $comment,
+								));
+							}
+						}
+					}else{
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $comment,
+								));
+							}
+						}
+					}
+				}
+			}
+			else {
+				if($waktu == ''){
+					if($kuota == ''){
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"comment" => $comment,
+								));
+							}
+						}
+					}else{
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $comment,
+								));
+							}
+						}
+					}
+				} else {
+					if($kuota == ''){
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"comment" => $comment,
+								));
+							}
+						}
+					}else{
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => random_string('alnum', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $comment,
+								));
+							}
+						}
+					}
+				}
+			}
+		}
+		else{
+			if($voucher = 'beda'){
+				if($waktu == ''){
+					if($kuota == ''){
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"comment" => $comment,
+								));
+							}
+						}
+					}else{
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $comment,
+								));
+							}
+						}
+					}
+				} else {
+					if($kuota == ''){
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"comment" => $comment,
+								));
+							}
+						}
+					}else{
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"password" => random_string('numeric', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $comment,
+								));
+							}
+						}
+					}
+				}
+			}
+			else {
+				if($waktu == ''){
+					if($kuota == ''){
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"comment" => $comment,
+								));
+							}
+						}
+					}else{
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"profile" => $profile,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $comment,
+								));
+							}
+						}
+					}
+				} else {
+					if($kuota == ''){
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"comment" => $comment,
+								));
+							}
+						}
+					}else{
+						if($komentar == ''){
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $dibuat,
+								));
+							}
+						} else {
+							for($i=1; $i <= $jumlah; $i++){
+								$API->comm("/ip/hotspot/user/add", array(
+									"name" => $prefix . random_string('alnum', $panjang),
+									"profile" => $profile,
+									"limit-uptime" => $limit_waktu,
+									"server" => $server,
+									"limit-bytes-total" => $limit_kuota,
+									"comment" => $comment,
+								));
+							}
+						}
+					}
+				}
+			}
+		}
+
+        $this->session->set_flashdata('success', $jumlah.' Voucher berhasil Dibuat');
+        redirect('hotspot/generate');
+
+        $API->disconnect();
+    }

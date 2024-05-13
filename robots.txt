@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap:https://grizylnet.my.id/sitemap.xml
+Sitemap:https://grizylnet.my.id/sitemap_1.xml
